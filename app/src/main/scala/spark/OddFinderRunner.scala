@@ -1,7 +1,6 @@
 package spark
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
-import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import spark.OddFinder.TargetPath
 
