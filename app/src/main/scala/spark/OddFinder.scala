@@ -50,7 +50,7 @@ object OddFinder {
       case (Some(t), Some(c)) => c.union(t)
       case (None, Some(c))    => c
       case (Some(t), None)    => t
-      case (None, None)       => throw new IllegalStateException("Unable to find a CSV or TSV file")
+      case (None, None)       => throw new IllegalStateException(s"Unable to find a CSV or TSV file in ${filePath.path}")
     }
   }
 
