@@ -12,18 +12,16 @@ object OddFinder {
   def find(
     df: DataFrame
   ): DataFrame = {
-    //random columns, so fetch them
     val columnNames = df.columns
     val keyColumnName = columnNames.headOption.getOrElse(
       throw new IllegalStateException("Unable to retrieve key (first) column name/header"))
     val valueColumnName = columnNames.lastOption.getOrElse(
       throw new IllegalStateException("Unable to retrieve value (second) column name/header"))
 
-    df.show()
-
     df.withColumn(valueColumnName,
                   when(col(valueColumnName).isNull.or(col(valueColumnName) === ""), lit(0))
                     .otherwise(col(valueColumnName)))
+      .repartition(df.rdd.getNumPartitions)
       .groupBy(valueColumnName, keyColumnName)
       .agg(count(valueColumnName).alias("count"))
       .filter(col("count") % 2 === 1)

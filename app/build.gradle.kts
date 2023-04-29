@@ -23,6 +23,43 @@ dependencies {
 
 }
 
+sourceSets {
+    val emr by creating {
+        scala.srcDir("app/src/main/scala/emr")
+    }
+
+    val spark by creating {
+        scala.srcDir("app/src/main/scala/spark")
+    }
+}
+
+tasks.register<Jar>("emrSubmitter") {
+    group = "JARs"
+
+    from(sourceSets["emr"].output)
+    archiveFileName.set("emrSubmitter.jar")
+
+    manifest {
+        attributes["Main-Class"] = "emr.EMRJobSubmitter"
+    }
+}
+
+tasks.register<Jar>("oddFinderRunner") {
+    group = "JARs"
+
+    from(sourceSets["spark"].output)
+    archiveFileName.set("oddFinderRunner.jar")
+
+    manifest {
+        attributes["Main-Class"] = "spark.OddFinderRunner"
+    }
+}
+
+artifacts {
+    add("archives", tasks.named<Jar>("emrSubmitter"))
+    add("archives", tasks.named<Jar>("oddFinderRunner"))
+}
+
 application {
     mainClass.set("spark.OddFinderRunner")
 

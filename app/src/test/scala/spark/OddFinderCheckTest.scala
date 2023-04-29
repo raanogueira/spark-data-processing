@@ -57,8 +57,6 @@ class OddFinderCheckTest extends AnyWordSpec with Matchers with SparkSessionTest
 
       val expected = List((1, 0)).toDF("key", "value")
 
-      result.show()
-
       result.except(expected).union(expected.except(result))
     }
   }
