@@ -1,6 +1,6 @@
 package spark
 
-import org.apache.spark.sql.functions.{coalesce, col, count, lit, when}
+import org.apache.spark.sql.functions.{col, count, lit, when}
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 
 import scala.util.Try
@@ -9,6 +9,9 @@ object OddFinder {
 
   case class TargetPath(path: String) extends AnyVal
 
+  /**
+    * Finds out which values occurred an odd number of time for each key.
+    */
   def find(
     df: DataFrame
   ): DataFrame = {
@@ -21,13 +24,16 @@ object OddFinder {
     df.withColumn(valueColumnName,
                   when(col(valueColumnName).isNull.or(col(valueColumnName) === ""), lit(0))
                     .otherwise(col(valueColumnName)))
-      .repartition(df.rdd.getNumPartitions)
+      .repartition(col(keyColumnName))
       .groupBy(valueColumnName, keyColumnName)
       .agg(count(valueColumnName).alias("count"))
       .filter(col("count") % 2 === 1)
       .select(col(keyColumnName), col(valueColumnName))
   }
 
+  /**
+    * Reads all all CSV and TSV files within a directory or S3 bucket and merge them into one dataframe
+    */
   def read(
     spark: SparkSession
   )(
@@ -50,7 +56,8 @@ object OddFinder {
       case (Some(t), Some(c)) => c.union(t)
       case (None, Some(c))    => c
       case (Some(t), None)    => t
-      case (None, None)       => throw new IllegalStateException(s"Unable to find a CSV or TSV file in ${filePath.path}")
+      case (None, None) =>
+        throw new IllegalStateException(s"Unable to find a CSV or TSV file in ${filePath.path}")
     }
   }
 

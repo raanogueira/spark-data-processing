@@ -13,22 +13,29 @@ repositories {
 }
 
 dependencies {
-    implementation("org.scala-lang:scala-library:2.12.17")
+    val scala = "2.12"
+    val awsSdk = "1.12.459"
+    val hadoop = "3.3.5"
+    val spark = "3.4.0"
 
-    implementation("org.apache.spark:spark-core_2.12:3.4.0")
-    implementation("org.apache.spark:spark-sql_2.12:3.4.0")
-    implementation("org.apache.hadoop:hadoop-aws:3.3.5")
-    implementation("org.apache.hadoop:hadoop-common:3.3.5")
+    implementation("org.scala-lang:scala-library:$scala.17")
+    implementation("ch.qos.logback:logback-classic:1.4.7")
+    implementation("com.typesafe.scala-logging:scala-logging_$scala:3.9.5")
 
-    implementation("com.amazonaws:aws-java-sdk-core:1.12.459")
-    implementation("com.amazonaws:aws-java-sdk-s3:1.12.316")
+    implementation("org.apache.spark:spark-core_$scala:$spark")
+    implementation("org.apache.spark:spark-sql_$scala:$spark")
+    implementation("org.apache.hadoop:hadoop-aws:$hadoop")
+    implementation("org.apache.hadoop:hadoop-common:$hadoop")
+
+    implementation("com.amazonaws:aws-java-sdk-core:$awsSdk")
+    implementation("com.amazonaws:aws-java-sdk-s3:$awsSdk")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.amazonaws:aws-java-sdk-core:1.12.459")
-    testImplementation("org.scalatest:scalatest_2.12:3.2.14")
-    testImplementation("org.scalatestplus:junit-4-12_2.12:3.2.2.0")
-    testImplementation("org.scalacheck:scalacheck_2.12:1.17.0")
-    testImplementation("io.findify:s3mock_2.12:0.2.6")
+    testImplementation("org.scalatest:scalatest_$scala:3.2.14")
+    testImplementation("org.scalatestplus:junit-4-12_$scala:3.2.2.0")
+    testImplementation("org.scalacheck:scalacheck_$scala:1.17.0")
+    testImplementation("io.findify:s3mock_$scala:0.2.6")
 }
 
 application {

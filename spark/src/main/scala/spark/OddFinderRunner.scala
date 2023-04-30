@@ -1,13 +1,14 @@
 package spark
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
+import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.sql.SparkSession
 import spark.OddFinder.TargetPath
 
-object OddFinderRunner {
+object OddFinderRunner extends LazyLogging {
   def main(args: Array[String]): Unit = {
     if (args.length < 2) {
-      println("Usage: OddFinderRunner <inputPath (local or s3)> <output path (local or s3)>")
+      logger.error("Usage: OddFinderRunner <inputPath (local or s3)> <output path (local or s3)>")
       System.exit(1)
     }
 
