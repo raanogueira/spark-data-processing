@@ -1,6 +1,11 @@
 plugins {
     scala
     application
+    id("com.github.johnrengelman.shadow") version "7.1.1"
+}
+
+tasks.shadowJar {
+    isZip64 = true
 }
 
 repositories {
@@ -9,55 +14,21 @@ repositories {
 
 dependencies {
     implementation("org.scala-lang:scala-library:2.12.17")
+
     implementation("org.apache.spark:spark-core_2.12:3.4.0")
     implementation("org.apache.spark:spark-sql_2.12:3.4.0")
-    implementation("com.amazonaws:aws-java-sdk-s3:1.12.316")
     implementation("org.apache.hadoop:hadoop-aws:3.3.5")
     implementation("org.apache.hadoop:hadoop-common:3.3.5")
 
+    implementation("com.amazonaws:aws-java-sdk-core:1.12.459")
+    implementation("com.amazonaws:aws-java-sdk-s3:1.12.316")
+
     testImplementation("junit:junit:4.13.2")
+    testImplementation("com.amazonaws:aws-java-sdk-core:1.12.459")
     testImplementation("org.scalatest:scalatest_2.12:3.2.14")
     testImplementation("org.scalatestplus:junit-4-12_2.12:3.2.2.0")
     testImplementation("org.scalacheck:scalacheck_2.12:1.17.0")
     testImplementation("io.findify:s3mock_2.12:0.2.6")
-
-}
-
-sourceSets {
-    val emr by creating {
-        scala.srcDir("app/src/main/scala/emr")
-    }
-
-    val spark by creating {
-        scala.srcDir("app/src/main/scala/spark")
-    }
-}
-
-tasks.register<Jar>("emrSubmitter") {
-    group = "JARs"
-
-    from(sourceSets["emr"].output)
-    archiveFileName.set("emrSubmitter.jar")
-
-    manifest {
-        attributes["Main-Class"] = "emr.EMRJobSubmitter"
-    }
-}
-
-tasks.register<Jar>("oddFinderRunner") {
-    group = "JARs"
-
-    from(sourceSets["spark"].output)
-    archiveFileName.set("oddFinderRunner.jar")
-
-    manifest {
-        attributes["Main-Class"] = "spark.OddFinderRunner"
-    }
-}
-
-artifacts {
-    add("archives", tasks.named<Jar>("emrSubmitter"))
-    add("archives", tasks.named<Jar>("oddFinderRunner"))
 }
 
 application {
