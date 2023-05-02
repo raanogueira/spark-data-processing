@@ -17,14 +17,20 @@ key,value
 output.tsv:
 
 ```
-key,value
-1,2
-3,4
+key value
+1   2
+3   4
 ```
 
 As noticed above, the number 2 occurred was the only value for the key 1 that occurred an odd number of times. The same applies to the key 3 and value 4
 
 The spark job has support to reading and writing from/to S3, a simple app that allows you to submit your job to Amazon Elastic Map Reduce (EMR) 
+
+# Pre-requisites
+
+1 - Spark 3.4.0: https://spark.apache.org/downloads.html
+2 - openjdk 11.0.2
+3 - Scala 2.12.17
 
 # Project Structure
 
@@ -45,6 +51,10 @@ The spark job has support to reading and writing from/to S3, a simple app that a
 └── submit-local.sh
 
 ```
+
+# Setting up AWS credentials
+
+Set up the AWS credentials in ~/.aws/credentials and specify the profile via command line argument. Alternatively if no profile is specified the spark job will use the [DefaultAWSCredentialsProviderChain](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/auth/DefaultAWSCredentialsProviderChain.html)
 
 
 # Getting Started

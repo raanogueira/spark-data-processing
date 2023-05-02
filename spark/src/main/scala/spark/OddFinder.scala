@@ -11,6 +11,8 @@ object OddFinder {
 
   /**
     * Finds out which values occurred an odd number of time for each key.
+    * A possible improvement would be using reduceByKey
+    * instead of groupBy to reduce data transferred across partitions (less shuffling )
     */
   def find(
     df: DataFrame
@@ -32,7 +34,8 @@ object OddFinder {
   }
 
   /**
-    * Reads all all CSV and TSV files within a directory or S3 bucket and merge them into one dataframe
+    * Reads all all CSV and TSV files within a directory or S3 bucket and merge them into one dataframe.
+    * We could use parquet or a custom implementation to balance the number of files across all workers
     */
   def read(
     spark: SparkSession
